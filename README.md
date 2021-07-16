@@ -9,3 +9,19 @@ How the directories should be set up
   - exp2
   - ...
   - expn
+
+----------------------------------------------
+
+# how to use:
+
+- Run CFU_experiment.m
+- choose one of the exp(s)
+- run through the images and follow the prompts 
+
+It will produce a data.csv file in each of the exp(s)
+
+- Run combine_csvs.m
+
+It will produce a combined_data.csv from all the exp(s) data.csv that has all the data combined into one
+
+
