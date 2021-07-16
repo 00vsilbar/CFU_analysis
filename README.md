@@ -8,7 +8,7 @@ How the directories should be set up
   - exp1
   - exp2
   - ...
-  - expn
+  - exp(n)
 
 ----------------------------------------------
 
