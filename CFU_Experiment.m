@@ -1,6 +1,11 @@
 %Vanessa Silbar
 %7/7/21, Image processing for bacteria colonies
 
+% Sam Freitas
+% 7/16/21 edited :D
+
+warning('off', 'MATLAB:MKDIR:DirectoryExists');
+
 clear all
 close all force hidden
 
@@ -14,6 +19,9 @@ manually_separate = 1;
 
 % crop the images if they are just kinda bad
 crop_images = 1;
+
+% export the masks 
+export_masks = 1;
 
 img_paths = dir(fullfile(img_dir_path, '*.png'));
 
@@ -79,8 +87,14 @@ for i = 1:length(img_paths)
     extracted_num{i} = str2double(extracted_txt_num);
     extracted_unit{i} = extracted_txt_units;
     
+    % get threshold
+    thresh = mean2(data) + 1.5*std2(data);
+    % get mask
+    masked_data = bwareaopen(data > thresh,500,4);
+    
     if crop_images
-        imshow(data,[])
+        imshow(masked_data)
+        title(img_paths(i).name,'Interpreter','none')
         
         dlg_choice_crop = questdlg({'Does this image need to be cropped?',...
             'If so crop the image with a double click and drag'},'Colonies','Yes','No','No');
@@ -88,15 +102,13 @@ for i = 1:length(img_paths)
         if isequal(dlg_choice_crop,'Yes')
             data = imcrop(data);
         end
+        
+        thresh = mean2(data) + 1.5*std2(data);
+        % get mask
+        masked_data = bwareaopen(data > thresh,500,4);
+        
     end
-    
-    close all
-    
-    % get threshold
-    thresh = mean2(data) + 2*std2(data);
-    % get mask
-    masked_data = bwareaopen(data > thresh,1000,4);
-    
+        
     if manually_separate
         % show mask
         imshow(masked_data);
@@ -132,6 +144,25 @@ for i = 1:length(img_paths)
     Ifill = imfill(final_mask>0,'holes');
     % region props
     bw_stats = regionprops(Ifill,'Centroid','MajorAxisLength','MinorAxisLength','Area');
+    
+    if export_masks
+        mkdir('exported_images');
+        mkdir(fullfile('exported_images',name));
+        
+        out_img_path = fullfile('exported_images',name,img_paths(i).name);        
+        
+        [boundary_pixels,this_label] = bwboundaries(Ifill,'noholes');
+        
+        rgb_label = label2rgb(this_label,'jet','k');
+        
+        for j = 1:length(bw_stats)
+            rgb_label = insertText(rgb_label,bw_stats(j).Centroid,num2str(j),...
+                'TextColor','w','BoxColor','g','FontSize',36);
+        end
+        
+        imwrite(rgb_label,out_img_path)
+        
+    end
     
     % get stats
     for j = 1:length(bw_stats)
