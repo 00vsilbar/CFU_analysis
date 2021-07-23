@@ -9,16 +9,17 @@ allExts = cellfun(@(s) s(end-2:end), {message.Name},'uni',0); % Get exts
 CSVidx = ismember(allExts,'csv');    % Search ext for "CSV" at the end
 CSV_filepaths = {message(CSVidx).Name};  % Use CSVidx to list all paths.
 
-CSV_filepaths2 = CSV_filepaths;
-for i = 1:length(CSV_filepaths)
-    [~,name,~] = fileparts(CSV_filepaths{i});
+[~,CSV_names,~] = fileparts(CSV_filepaths);
+
+combined_data_idx = find(contains(CSV_names,'combined_data'));
+
+if ~isempty(combined_data_idx)
     
-    if isequal(name,'combined_data')
-        CSV_filepaths2{i} = [];
-    end
+    CSV_filepaths(combined_data_idx) = [];
+    
 end
 
-CSV_filepaths = CSV_filepaths2(~cellfun('isempty',CSV_filepaths2));
+CSV_filepaths = CSV_filepaths(~cellfun('isempty',CSV_filepaths));
 
 fprintf('There are %i files with data.csv exts.\n',numel(CSV_filepaths));
 

@@ -136,7 +136,7 @@ for i = 1:length(img_paths)
                 'If so draw line between colonies'},'Colonies','Yes','No','No');
         end
     end
-    final_mask = imclearborder(masked_data);
+    final_mask = imclearborder(masked_data,8);
     close all
     
     clear ROI
