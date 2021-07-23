@@ -167,7 +167,7 @@ for i = 1:length(img_paths)
     % get stats
     for j = 1:length(bw_stats)
         exp_name(count) = string(name);
-        img_name(count) = string(img_paths(i).name);
+        img_name(count) = string(fullfile(img_paths(i).folder,img_paths(i).name));
         img_num(count) = i;
         total_num_colony(count) = count;
         img_num_colony(count) = j;
