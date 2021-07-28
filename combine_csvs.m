@@ -1,6 +1,6 @@
 
 mainFolder = uigetdir();    % Selectyour Main folder
-[~,message,~] = fileattrib([mainFolder,'\*']);
+[~,message,~] = fileattrib(fullfile(mainFolder,'*'));
 
 fprintf('\nThere are %i total files & folders in the overarching folder.\n',numel(message));
 
