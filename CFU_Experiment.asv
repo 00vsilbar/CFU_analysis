@@ -42,8 +42,6 @@ total_num_colony = zeros(1,length(img_paths));
 area_data = zeros(1,length(img_paths));
 units_per_pixel = zeros(1,length(img_paths));
 area_in_units = zeros(1,length(img_paths));
-colony_circularity_data = zeros(1,length(img_paths));
-perimeter_data = zeros(1,length(img_paths));
 
 count = 1;
 se = strel('disk',30);
@@ -92,7 +90,7 @@ for i = 1:length(img_paths)
     % get threshold
     thresh = mean2(data) + 1.5*std2(data);
     % get mask
-    masked_data = bwareaopen(data > thresh,1000,4);
+    masked_data = bwareaopen(data > thresh,500,4);
     
     if crop_images
         imshow(masked_data)
@@ -107,7 +105,7 @@ for i = 1:length(img_paths)
         
         thresh = mean2(data) + 1.5*std2(data);
         % get mask
-        masked_data = bwareaopen(data > thresh,1000,4);
+        masked_data = bwareaopen(data > thresh,500,4);
         
     end
         
@@ -174,14 +172,12 @@ for i = 1:length(img_paths)
         total_num_colony(count) = count;
         img_num_colony(count) = j;
         major_radius(count) = bw_stats(j).MajorAxisLength/2;
-        minor_radius(count) = bw_stats(j).MinorAxisLength/2;
+        minor_radius(count) = bw_stats(j).MajorAxisLength/2;
         calculated_radius(count) = sqrt(bw_stats(j).Area/pi);
         avg_radius(count) = (bw_stats(j).MajorAxisLength/2 + bw_stats(j).MajorAxisLength/2 + sqrt(bw_stats(j).Area/pi))/3;
         area_data(count) = bw_stats(j).Area;
         
-        perimeter_data(count) = bw_stats(j).Perimeter;
-        
-        colony_circularity_data(count) = (perimeter_data(count)^2) / (4*pi*area_data(count));
+        perimeter(count) = bw_stats
         
         units_in_img(count) = extracted_txt_units;
         
@@ -197,12 +193,10 @@ end
 csv_header = ["Sub Experiment Name","Image Path","Image Number",...
     "Total Colony Counter","Image Colony Counter"...
     "Major Radius","Minor Radius","Calculated Radius","Average Radius"...
-    "Calculated Area sq pixels","Units","Scale Units/Pixel","Area in sq Units",...
-    "Perimeter","Circularity"];
+    "Calculated Area sq pixels","Units","Scale Units/Pixel","Area in sq Units"];
 
 exp_table = [exp_name;img_name;img_num;total_num_colony;img_num_colony;major_radius;minor_radius;calculated_radius;...
-    avg_radius;area_data;units_in_img;units_per_pixel;area_in_units;...
-    perimeter_data;colony_circularity_data]';
+    avg_radius;area_data;units_in_img;units_per_pixel;area_in_units]';
 
 for i = 1:size(exp_table,1)
     for j = 1:size(exp_table,2)
