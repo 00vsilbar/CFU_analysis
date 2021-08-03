@@ -53,7 +53,7 @@ for i = 1:height(full_table)
             additional_strings = [additional_strings; ...
                 strsplit(this_path,{'\','/'})];
         catch
-            disp(i)
+            disp(['error on full_table line ' num2str(i)])
         end
     end
     
