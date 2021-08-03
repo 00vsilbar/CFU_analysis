@@ -1,3 +1,4 @@
+clear all
 
 mainFolder = uigetdir();    % Selectyour Main folder
 [~,message,~] = fileattrib(fullfile(mainFolder,'*'));
@@ -52,10 +53,10 @@ for i = 1:height(full_table)
             additional_strings = [additional_strings; ...
                 strsplit(this_path,{'\','/'})];
         catch
-            
+            disp(i)
         end
     end
     
 end
 
-writetable(full_table,fullfile(mainFolder,'combined_data.csv'))
+writetable(out_table,fullfile(mainFolder,'combined_data.csv'))
