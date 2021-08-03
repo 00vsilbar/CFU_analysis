@@ -41,4 +41,21 @@ for i = 1:length(csv_table)
     
 end
 
+additional_strings = strings();
+for i = 1:height(full_table)
+    
+    this_path = string(full_table.("Image Path")(i));
+    if i == 1
+        additional_strings = strsplit(this_path,{'\','/'});
+    else
+        try
+            additional_strings = [additional_strings; ...
+                strsplit(this_path,{'\','/'})];
+        catch
+            
+        end
+    end
+    
+end
+
 writetable(full_table,fullfile(mainFolder,'combined_data.csv'))
