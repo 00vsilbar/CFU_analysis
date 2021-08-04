@@ -59,4 +59,6 @@ for i = 1:height(full_table)
     
 end
 
+out_table = [full_table; table(additional_strings)];
+
 writetable(out_table,fullfile(mainFolder,'combined_data.csv'))
